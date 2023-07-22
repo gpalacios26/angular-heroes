@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { AuthService } from '../../../auth/services/auth.service';
+import { User } from '../../../auth/interfaces/user.interface';
 
 @Component({
   selector: 'app-layout-page',
@@ -6,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
   styles: [
   ]
 })
-export class LayoutPageComponent implements OnInit {
+export class LayoutPageComponent {
 
   public sidebarItems = [
     { label: 'Listado', icon: 'label', url: './list' },
@@ -14,9 +18,18 @@ export class LayoutPageComponent implements OnInit {
     { label: 'Buscar', icon: 'search', url: './search' },
   ];
 
-  constructor() { }
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) { }
 
-  ngOnInit(): void {
+  get user(): User | undefined {
+    return this.authService.currentUser;
+  }
+
+  onLogout() {
+    this.authService.logout();
+    this.router.navigate(['/auth/login'])
   }
 
 }
